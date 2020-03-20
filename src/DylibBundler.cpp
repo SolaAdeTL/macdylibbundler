@@ -157,7 +157,7 @@ void fixRpathsOnFile(const std::string& original_file, const std::string& file_t
     for (size_t i=0; i < rpaths_to_fix.size(); ++i)
     {
         std::string command = std::string("install_name_tool -rpath ") +
-                rpaths_to_fix[i] + " " + Settings::inside_lib_path() + " " + file_to_fix;
+                rpaths_to_fix[i] + " " + Settings::inside_lib_path() + " " + prepPath(file_to_fix);
         if ( systemp(command) != 0)
         {
             std::cerr << "\n\nError : An error occured while trying to fix dependencies of " << file_to_fix << std::endl;
@@ -199,6 +199,7 @@ void addDependency(std::string path, std::string filename)
 void collectDependencies(std::string filename, std::vector<std::string>& lines)
 {
     // execute "otool -l" on the given file and collect the command's output
+    filename = quote(filename);
     std::string cmd = "otool -l " + filename;
     std::string output = system_get_output(cmd);
 
@@ -308,6 +309,9 @@ void createDestDir()
     std::string dest_folder = Settings::destFolder();
     std::cout << "* Checking output directory " << dest_folder.c_str() << std::endl;
     
+    if(dest_folder.find_first_of(' ')!= std::string::npos) {
+        dest_folder = quote(dest_folder);
+    }
     // ----------- check dest folder stuff ----------
     bool dest_exists = fileExists(dest_folder);
     

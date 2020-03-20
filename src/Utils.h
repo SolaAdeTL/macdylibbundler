@@ -43,5 +43,8 @@ std::string system_get_output(std::string cmd);
 int systemp(std::string& cmd);
 void changeInstallName(const std::string& binary_file, const std::string& old_name, const std::string& new_name);
 std::string getUserInputDirForFile(const std::string& filename);
+std::string quote(const std::string& s);
+std::string unquote(const std::string& s);
+std::string prepPath(const std::string& s);
 
 #endif
